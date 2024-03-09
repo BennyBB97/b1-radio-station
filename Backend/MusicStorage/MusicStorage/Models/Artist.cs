@@ -3,8 +3,9 @@
     public class Artist
     {
         public int ArtistId { get; set; }
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
-        public List<Track>? Tracks { get; set; }
-}
+        public ICollection<TrackArtist> TrackArtists { get; set; }
+       
+    }
 }

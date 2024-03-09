@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using MusicStorage.Data;
+using MusicStorage.Interfaces;
+using MusicStorage.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,8 @@ builder.Services.AddDbContext<DataContext>(options =>
     );
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<IMusicRepository, MusicRepository>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
