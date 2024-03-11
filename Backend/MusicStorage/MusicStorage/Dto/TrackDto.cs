@@ -7,6 +7,6 @@ namespace MusicStorage.Dto
         public int TrackId { get; set; }
         public string Titel { get; set; }
         public GenreDto Genre { get; set; }
-        public ICollection<ArtistDto> Artists { get; set; }
+        public List<ArtistDto> Artists { get; set; }
     }
 }
