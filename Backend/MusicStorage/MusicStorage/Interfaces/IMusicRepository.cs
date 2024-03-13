@@ -6,23 +6,24 @@ namespace MusicStorage.Interfaces
     public interface IMusicRepository
     {
         List<TrackDto> GetAllTracks();
-
-        ICollection<Genre> GetGenres();
-
-        ICollection<TrackDto> SearchTracks(SearchTracksDto searchTracks);      
+        List<GenreDto> GetGenres();
+        Track getTrack(int trackId);
+        Artist getArtist(string artistName);
+        List<ArtistDto> GetAllArtistsFromTrack(int trackId);
+        List<TrackDto> SearchTracks(string searchTerm);    
 
         void CreateTrack(CreateTrackDto createTrack);
-
         void UpdateTrack(UpdateTrackDto track);
-
-        void CreateArtistToTrack(ModifyArtistsDto artists);
-        void DeleteArtistFromTrack(ModifyArtistsDto artists);
-
+        void AddArtistToTrack(int trackId, ArtistDto artist);    
         bool CheckTrackHasUniqueArtists(List<string> artistNamens, string trackTitel);
+        bool CheckTrackHasUniquieArtistAfterUpdate(int trackId, string newTrackTitel);
         bool CheckTrackExist(string trackTitel);
         bool CheckTrackExist(int trackId);
         bool CheckGenreExist(int genreId);
-
+        bool CheckArtistExist(int artistId);
+        bool CheckArtistExist(string artistName);
+        bool CheckArtistBelongsToTrack(int trackId, int artistId);
+        void DeleteArtistFromTrack(int trackId, int artistId);        
         void DeleteTrack(int trackId);
     }
 }
