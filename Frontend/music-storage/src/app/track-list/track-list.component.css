@@ -12,9 +12,13 @@ mat-grid-tile {
     display: flex;
     justify-content: center;
     margin: 50px;
+    
 }
 
-
+.search-term-form-field{
+    width: 300px;
+    
+}
 
 .center-content{
     display: flex;

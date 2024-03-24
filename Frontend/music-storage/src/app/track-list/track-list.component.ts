@@ -13,11 +13,12 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatChipsModule} from '@angular/material/chips';
 import {MatDialog, MatDialogModule} from '@angular/material/dialog';
 import { DialogDeleteTrackComponent } from '../dialog-delete-track/dialog-delete-track.component';
+import {MatTableModule} from '@angular/material/table';
 
 @Component({
   selector: 'app-track-list',
   standalone: true,
-  imports: [MatDialogModule, MatCardModule, MatButtonModule, MatGridListModule, NgFor, RouterModule, MatFormFieldModule, MatInputModule, MatIconModule, MatChipsModule, ReactiveFormsModule],
+  imports: [MatTableModule, MatDialogModule, MatCardModule, MatButtonModule, MatGridListModule, NgFor, RouterModule, MatFormFieldModule, MatInputModule, MatIconModule, MatChipsModule, ReactiveFormsModule],
   templateUrl: './track-list.component.html',
   styleUrl: './track-list.component.css'
 })
@@ -25,6 +26,9 @@ import { DialogDeleteTrackComponent } from '../dialog-delete-track/dialog-delete
 export class TrackListComponent implements OnInit{
   tracks: Track[];
   //searchTerm = '';
+  dataSource: any[] = [];
+  displayedColumns: string[] = ['titel'];
+
   searchForm = new FormGroup({
     searchTerm: new FormControl(''),
     type: new FormControl('4'),

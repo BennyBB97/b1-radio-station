@@ -33,7 +33,7 @@ namespace MusicStorage.Repository
         /// <returns></returns>
         public bool CheckTrackExist(string trackTitel)
         {
-            return context.Tracks.Any(t => t.Titel.Equals(trackTitel));
+            return context.Tracks.Any(t => t.Titel.ToLower().Equals(trackTitel.ToLower()));
         }
 
         /// <summary>
@@ -335,7 +335,7 @@ namespace MusicStorage.Repository
                     query = query.Where(q => q.Name.ToLower().Equals(searchTerm.ToLower()));
                     break; 
                 case 2:
-                    query = query.Where(q => q.genreName.ToLower().Equals(searchTerm.ToLower()));
+                    query = query.Where(q => q.genreName.ToLower().Equals(searchTerm.ToLower())); //fix bug: andere artists werden übersprungen
                     break;        
                 default:
                     query = query.Where(q => q.Name.ToLower().Equals(searchTerm.ToLower()) ||

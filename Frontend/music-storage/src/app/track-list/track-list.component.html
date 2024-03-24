@@ -34,14 +34,15 @@
 
 <div class='track-card' *ngFor="let track of tracks; let i=index">
     <mat-card>
-        <mat-card-header>{{track.titel}}</mat-card-header>
-        <div class='test' *ngFor="let artist of track.artists; let j=index">
+        <mat-card-header>{{track.titel}} - {{track.genre.name}}</mat-card-header>    
+        <div *ngFor="let artist of track.artists; let j=index">
             <mat-card-subtitle>{{artist.name}}</mat-card-subtitle>  
         </div>
               
         <mat-card-actions align="end">  
-            <button mat-button (click)="openDialogDeleteTrack(track.trackId)">Delete</button>
+            <button mat-button  (click)="openDialogDeleteTrack(track.trackId)">Delete</button>
             <button mat-button [routerLink]="['/track', track.trackId]">Edit</button>
         </mat-card-actions>
     </mat-card>   
 </div>
+  

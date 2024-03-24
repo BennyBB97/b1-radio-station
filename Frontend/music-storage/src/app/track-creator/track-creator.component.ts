@@ -45,7 +45,10 @@ export class TrackCreatorComponent {
   }
 
   deleteArtist(index: number){
-    this.artists.removeAt(index);
+    if(this.artists.length > 1){
+      this.artists.removeAt(index);
+    }
+    
   }
 
   

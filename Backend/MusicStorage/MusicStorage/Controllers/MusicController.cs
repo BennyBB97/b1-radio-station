@@ -47,12 +47,6 @@ namespace MusicStorage.Controllers
         [HttpGet("track/{searchTerm}/{type}")]
         public IActionResult SearchTrack(string searchTerm, int type)
         {
-            //0 - alles
-            //1 - titel
-            //2 - artist
-            //3 - genre
-
-            //todo - Implement search type
             if (searchTerm.Equals(""))
                 return BadRequest("Please define a search term");
 
@@ -66,8 +60,14 @@ namespace MusicStorage.Controllers
             if (track.ArtistNames.Count == 0)
                 return BadRequest("No artist was specified");
 
-            if(track.Titel.Equals("") || track.Titel.Length >= 30)
-                return BadRequest("The titel must be between 1 and 30 characters long.");
+            if(track.Titel.Length <3 || track.Titel.Length > 30)
+                return BadRequest("The titel must be between 3 and 30 characters long.");
+
+            foreach (var item in track.ArtistNames)
+            {
+                if (item.Length < 3 || item.Length > 20)
+                    return BadRequest("The artist must be between 3 and 20 characters long.");
+            }
 
             if(!musicRepository.CheckGenreExist(track.GenreId))
                 return NotFound("The genre does not exist");
@@ -87,8 +87,8 @@ namespace MusicStorage.Controllers
         [HttpPut("track")]
         public IActionResult UpdateTrack([FromBody] UpdateTrackDto track)
         {
-            if (track.Titel.Equals("") || track.Titel.Length >= 30)
-                return BadRequest("The titel must be between 1 and 30 characters long.");
+            if (track.Titel.Length < 3 || track.Titel.Length > 30)
+                return BadRequest("The titel must be between 3 and 30 characters long.");
 
             if (!musicRepository.CheckTrackExist(track.TrackId))
                 return NotFound("Track does not exist");
@@ -107,8 +107,8 @@ namespace MusicStorage.Controllers
         [HttpPost("track/artist")]
         public IActionResult AddArtistToTrack([FromBody] AddArtist trackArtist)
         {
-            if (trackArtist.Name.Equals("") || trackArtist.Name.Length >= 20)
-                return BadRequest("The artist must be between 1 and 20 characters long.");
+            if (trackArtist.Name.Length < 3 || trackArtist.Name.Length > 20)
+                return BadRequest("The artist must be between 3 and 20 characters long.");
 
             if (!musicRepository.CheckTrackExist(trackArtist.TrackId))
                 return NotFound("Track does not exist");
