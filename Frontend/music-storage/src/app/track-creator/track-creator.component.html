@@ -1,0 +1,75 @@
+<div class="center-content">
+    <form [formGroup]="newTrackForm" (ngSubmit)="onSubmit()">
+
+        <table cellspacing="0" class="table-form">
+            <tr>
+              <td>                         
+                <mat-form-field class="input-width" appearance="outline" >
+                    <mat-label>Titel</mat-label>
+                    <input matInput placeholder="Titel" formControlName="titel">
+                </mat-form-field>
+              </td>
+                
+            </tr> 
+            <tr>
+              <td> 
+                <mat-form-field appearance="outline" class="input-width">
+                    <mat-label>Select a genre</mat-label>
+            
+                    <mat-select formControlName="genreId">                       
+                        <mat-option  *ngFor="let genre of genres" [value]="genre.genreId" >
+                            {{genre.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+              <td>
+            </tr> 
+            <tr>
+                <div formArrayName="artists">                                        
+                    <div *ngFor="let artist of artists.controls; let i=index">
+                        <td colspan="2"> 
+                            <mat-form-field appearance="outline" class="input-width">
+                                <mat-label>Artist</mat-label>
+                                <input matInput placeholder="Artist" [formControlName]="i">
+                            </mat-form-field>   
+                        </td>
+                        <td>                             
+                            <button class="button-delete-artist" type="button" mat-mini-fab color="warn" (click)="deleteArtist(i) ">
+                                <mat-icon>delete</mat-icon>
+                            </button>                               
+                        </td>
+                    </div>                                      
+                </div>
+            </tr>  
+            <tr>
+                <td class="button-center" >                         
+                    <button  type="button" mat-mini-fab color="accent" (click)="addArtist()">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                </td>                  
+            </tr>  
+            <tr>
+                <td>      
+                    <div class="button-td">
+                    <button type="submit" mat-raised-button color="primary"  [disabled]="!newTrackForm.valid">Submit</button>
+                    </div>                   
+                </td>                  
+            </tr>    
+        </table>    
+    </form>
+</div>
+
+
+
+    
+    
+    
+
+    
+   
+
+
+
+
+
+  

@@ -1,0 +1,17 @@
+<form [formGroup]="trackForm" (ngSubmit)="editTrackSubmit()">
+    <div style="text-align: center;" class="track-editor">
+        <mat-form-field class="example-full-width">
+            <mat-label>Titel</mat-label>
+            <input matInput formControlName="trackTitel">
+          </mat-form-field>        
+
+          <mat-form-field>
+            <mat-label>Genre</mat-label>
+            <mat-select formControlName="genreId">                       
+              <mat-option *ngFor="let genre of genres" [value]="genre.genreId">
+                {{genre.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>   
+    </div>
+</form>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using MusicStorage.Dto;
 using MusicStorage.Interfaces;
 using MusicStorage.Models;
@@ -7,6 +8,7 @@ namespace MusicStorage.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+
     public class MusicController : Controller
     {
 
@@ -31,14 +33,30 @@ namespace MusicStorage.Controllers
             return Ok(tracks);
         }
 
-        [HttpGet("track/{searchTerm}/{type}")]
-        public IActionResult SearchTrack(string searchTerm, string type)
+
+        [HttpGet("track/{trackId}")]
+        public IActionResult GetTrack(int trackId)
         {
+            if (!musicRepository.CheckTrackExist(trackId))
+                return NotFound("Track does not exist");
+
+            var track = musicRepository.getCompleteTrack(trackId);
+            return Ok(track);
+        }
+
+        [HttpGet("track/{searchTerm}/{type}")]
+        public IActionResult SearchTrack(string searchTerm, int type)
+        {
+            //0 - alles
+            //1 - titel
+            //2 - artist
+            //3 - genre
+
             //todo - Implement search type
             if (searchTerm.Equals(""))
                 return BadRequest("Please define a search term");
 
-            var tracks = musicRepository.SearchTracks(searchTerm);
+            var tracks = musicRepository.SearchTracks(searchTerm, type);
             return Ok(tracks);
         }
 
@@ -86,7 +104,7 @@ namespace MusicStorage.Controllers
             return Ok();
         }
 
-        [HttpPut("track/artist")]
+        [HttpPost("track/artist")]
         public IActionResult AddArtistToTrack([FromBody] AddArtist trackArtist)
         {
             if (trackArtist.Name.Equals("") || trackArtist.Name.Length >= 20)
@@ -124,8 +142,15 @@ namespace MusicStorage.Controllers
             musicRepository.AddArtistToTrack(trackArtist.TrackId, artistToAdd);
             return Ok();
         }
-                
-        [HttpDelete("{trackId}")]
+
+        [HttpPut("track/artist")]
+        public IActionResult UpdateArtist()
+        {
+            //todo 
+            return BadRequest("Endpoint is not implementet");
+        }
+
+        [HttpDelete("track/{trackId}")]
         public IActionResult DeleteTrack(int trackId)
         {
             if (!musicRepository.CheckTrackExist(trackId))
@@ -144,6 +169,9 @@ namespace MusicStorage.Controllers
 
             if(!musicRepository.CheckArtistBelongsToTrack(trackArtist.TrackId, trackArtist.ArtistId))
                 return BadRequest("Artist does not belongs to the track");
+
+            if (musicRepository.getArtistCount(trackArtist.TrackId) <= 1)
+                return BadRequest("Track must have at least one artist");
 
             var artists = musicRepository.GetAllArtistsFromTrack(trackArtist.TrackId);
             var artistToRemove = artists.Where(a => a.ArtistId == trackArtist.ArtistId).First();

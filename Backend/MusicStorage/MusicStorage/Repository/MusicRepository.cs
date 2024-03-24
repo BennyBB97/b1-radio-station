@@ -128,6 +128,44 @@ namespace MusicStorage.Repository
             return result;
         }
 
+        public TrackDto getCompleteTrack(int trackId)
+        {
+            var query = from track in context.Tracks
+                        join trackArtist in context.TrackArtists on track.TrackId equals trackArtist.TrackId
+                        join artist in context.Artists on trackArtist.ArtistId equals artist.ArtistId
+                        join genre in context.Genres on track.Genre.GenreId equals genre.GenreId
+                        where track.TrackId == trackId                        
+                        select new { track.TrackId, track.Titel, artist.ArtistId, artist.Name, genre.GenreId, genreName = genre.Name};
+
+            var completeTrack = query.FirstOrDefault();
+
+            GenreDto genreDto = new GenreDto()
+            {
+                GenreId = completeTrack.GenreId,
+                Name = completeTrack.genreName
+            };
+
+            TrackDto trackDto = new TrackDto()
+            {
+                TrackId = completeTrack.TrackId,
+                Titel = completeTrack.Titel,
+                Genre = genreDto
+            };
+            List<ArtistDto> artists = new List<ArtistDto>();
+
+            foreach (var track in query)
+            {
+                ArtistDto artist = new ArtistDto()
+                {
+                    ArtistId = track.ArtistId,
+                    Name = track.Name
+                };
+                artists.Add(artist);
+            }
+            trackDto.Artists = artists;           
+            return trackDto;
+        }
+
         /// <summary>
         /// Returns all artists from a specific track
         /// </summary>
@@ -276,18 +314,35 @@ namespace MusicStorage.Repository
         /// </summary>
         /// <param name="searchTerm">Term to be searched</param>
         /// <returns>List of Tracks with artists and genre type</returns>
-        public List<TrackDto> SearchTracks(string searchTerm)
+        public List<TrackDto> SearchTracks(string searchTerm, int type)
         {
             List<TrackDto> trackList = [];
-            //todo - Differentiate between search type            
+
+            //todo - Wie kann ich dynamisch where bedingungen hinzufügen?
+            //
             var query = from track in context.Tracks
                         join trackArtist in context.TrackArtists on track.TrackId equals trackArtist.TrackId
-                        join artist in context.Artists on trackArtist.ArtistId equals artist.ArtistId  
+                        join artist in context.Artists on trackArtist.ArtistId equals artist.ArtistId
                         join genre in context.Genres on track.Genre.GenreId equals genre.GenreId
-                        where track.Titel.ToLower().Equals(searchTerm.ToLower()) || 
-                        artist.Name.ToLower().Equals(searchTerm.ToLower()) ||
-                        genre.Name.ToLower().Equals(searchTerm.ToLower())
                         select new { track.TrackId, track.Titel, artist.ArtistId, artist.Name, genre.GenreId, genreName = genre.Name };
+
+            switch (type)
+            {
+                case 0:
+                    query = query.Where(q => q.Titel.ToLower().Equals(searchTerm.ToLower()));                    
+                    break;
+                case 1:
+                    query = query.Where(q => q.Name.ToLower().Equals(searchTerm.ToLower()));
+                    break; 
+                case 2:
+                    query = query.Where(q => q.genreName.ToLower().Equals(searchTerm.ToLower()));
+                    break;        
+                default:
+                    query = query.Where(q => q.Name.ToLower().Equals(searchTerm.ToLower()) ||
+                                        q.Titel.ToLower().Equals(searchTerm.ToLower()) ||
+                                        q.genreName.ToLower().Equals(searchTerm.ToLower()));
+                    break;
+            }            
 
             foreach (var item in query)
             {
@@ -456,6 +511,20 @@ namespace MusicStorage.Repository
         public Artist getArtist(string artistName)
         {
             return context.Artists.Where(a => a.Name.ToLower().Equals(artistName.ToLower())).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Counts the artist of a track
+        /// </summary>
+        /// <param name="trackId">The id of the track</param>
+        /// <returns>The count</returns>
+        public int getArtistCount(int trackId)
+        {
+            int count = (from track in context.Tracks
+                        join trackArtist in context.TrackArtists on track.TrackId equals trackArtist.TrackId
+                        where track.TrackId == trackId
+                        select trackArtist).Count();
+            return count;
         }
     }
 }

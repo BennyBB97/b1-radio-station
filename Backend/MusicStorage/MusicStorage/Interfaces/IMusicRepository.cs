@@ -10,8 +10,9 @@ namespace MusicStorage.Interfaces
         Track getTrack(int trackId);
         Artist getArtist(string artistName);
         List<ArtistDto> GetAllArtistsFromTrack(int trackId);
-        List<TrackDto> SearchTracks(string searchTerm);    
-
+        List<TrackDto> SearchTracks(string searchTerm, int type);
+        TrackDto getCompleteTrack(int trackId);
+        int getArtistCount(int trackId);
         void CreateTrack(CreateTrackDto createTrack);
         void UpdateTrack(UpdateTrackDto track);
         void AddArtistToTrack(int trackId, ArtistDto artist);    

@@ -1,0 +1,26 @@
+mat-grid-tile {
+    background: lightblue;
+  }
+
+.track-card {
+    max-width: 400px;    
+    margin: auto;
+    padding: 10px;
+}
+
+.track-search{
+    display: flex;
+    justify-content: center;
+    margin: 50px;
+}
+
+
+
+.center-content{
+    display: flex;
+    justify-content: center;
+    margin: 50px;
+}
+
+
+    

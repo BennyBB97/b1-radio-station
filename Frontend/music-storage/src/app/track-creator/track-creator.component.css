@@ -1,0 +1,37 @@
+.center-content{
+    display: flex;
+    justify-content: center;
+    margin: 50px;
+    text-align: center;
+}
+.button-td{
+    margin-top: 20px;    
+    text-align: center;
+}
+
+.button-delete{
+    margin: 20px;    
+}
+
+.button-delete-artist{
+    margin-left: 20px;    
+}
+
+.input-width {
+    width: 300px;
+  }
+
+.table-form{
+    width: 400px;
+    text-align: left;
+}
+
+.button-center{
+    text-align: center;
+}
+
+.formTrack{
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
